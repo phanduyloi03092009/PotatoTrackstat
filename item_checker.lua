@@ -360,21 +360,31 @@ end
 -- ============================================================
 -- QUICK SUMMARY
 -- ============================================================
-function ItemChecker.Summary()
+function ItemChecker.GetStats()
+    local plr = game.Players.LocalPlayer
+    local stats = {
+        Level = ItemChecker.GetLevel(),
+        Beli = (plr.leaderstats and plr.leaderstats:FindFirstChild("Beli") and plr.leaderstats.Beli.Value) or 0,
+        Fragments = (plr.leaderstats and plr.leaderstats:FindFirstChild("Fragments") and plr.leaderstats.Fragments.Value) or 0,
+        Fruits = {}
+    }
     local items = ItemChecker.ScanAll()
-    local mats = ItemChecker.ScanMaterials()
-    local lv = ItemChecker.GetLevel()
-    print("\n====== SUMMARY ======")
-    print("Level    : " .. tostring(lv))
-    print("Items    : " .. #items)
-    print("Materials: " .. #mats)
-    local cats = {}
     for _, i in ipairs(items) do
-        cats[i.Category] = (cats[i.Category] or 0) + 1
+        if i.Category == "Fruits" then
+            table.insert(stats.Fruits, i.Name)
+        end
     end
-    for cat, cnt in pairs(cats) do
-        print("  " .. cat .. ": " .. cnt)
-    end
+    return stats
+end
+
+function ItemChecker.Summary()
+    local s = ItemChecker.GetStats()
+    print("\n====== SUMMARY ======")
+    print("Level    : " .. s.Level)
+    print("Beli     : " .. s.Beli)
+    print("Frags    : " .. s.Fragments)
+    print("Fruits   : " .. #s.Fruits)
+    for _, f in ipairs(s.Fruits) do print("  - " .. f) end
     print("=====================")
 end
 
