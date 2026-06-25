@@ -363,15 +363,22 @@ end
 function ItemChecker.GetStats()
     local plr = game.Players.LocalPlayer
     local stats = {
+        PlayerName = plr.Name,
         Level = ItemChecker.GetLevel(),
         Beli = (plr.leaderstats and plr.leaderstats:FindFirstChild("Beli") and plr.leaderstats.Beli.Value) or 0,
         Fragments = (plr.leaderstats and plr.leaderstats:FindFirstChild("Fragments") and plr.leaderstats.Fragments.Value) or 0,
-        Fruits = {}
+        Fruits = {},
+        Swords = {},
+        Guns = {}
     }
     local items = ItemChecker.ScanAll()
     for _, i in ipairs(items) do
         if i.Category == "Fruits" then
             table.insert(stats.Fruits, i.Name)
+        elseif i.Category == "Swords" then
+            table.insert(stats.Swords, i.Name)
+        elseif i.Category == "Guns" then
+            table.insert(stats.Guns, i.Name)
         end
     end
     return stats
